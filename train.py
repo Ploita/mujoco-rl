@@ -88,12 +88,6 @@ def train_dqn(num_episodes: int, random_seeds: list[int]) -> list[list[int]]:
 
         # Create environment
         wrapped_env, obs_space_dims, action_space_dims = create_env()
-
-        # Reinitialize agent for each seed
-#        if os.path.exists('agent_object.pkl'):
-#            agent = pickle.load(open('agent_object.pkl', 'rb'))
-#        else:
-#            agent = DQNAgent(obs_space_dims, action_space_dims)
         agent = DQNAgent(obs_space_dims, action_space_dims)
 
         reward_over_episodes = []
