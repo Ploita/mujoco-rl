@@ -86,13 +86,13 @@ class DQNAgent:
     """Agent that learns to solve the environment using DQN."""
 
     def __init__(self, obs_space_dims: int, action_space_dims: int):
-        self.memory = deque(maxlen=1000)  # experience replay #type: ignore
+        self.memory = deque(maxlen=10000)  # experience replay #type: ignore
         self.gamma = 0.99  # discount factor
         self.epsilon = 1.0  # exploration rate
-        self.epsilon_min = 0.05  # minimal exploration rate
+        self.epsilon_min = 0.01  # minimal exploration rate
         self.epsilon_decay = 1 - 1/100  # exploration decay
-        self.batch_size = 1  # batch size for the experience replay
-        self.update_freq = 25  # frequency of updating the target network
+        self.batch_size = 20  # batch size for the experience replay
+        self.update_freq = 10  # frequency of updating the target network
         self.tau = 0.15 # update rate of the target network
 
         # networks
