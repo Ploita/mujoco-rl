@@ -25,7 +25,7 @@ def plot_learning_curve(rewards_over_seeds: dict, title: str):
     plt.show(block=False)
     plt.pause(10)  # plot will be displayed for 10 seconds
 
-def plot_durations(episode_durations,show_result=False):
+def plot_durations(episode_durations: list[int], show_result: bool =False):
     plt.figure(1)
     durations_t = torch.tensor(episode_durations, dtype=torch.float)
     if show_result:
@@ -46,17 +46,17 @@ def plot_durations(episode_durations,show_result=False):
     # set up matplotlib
     is_ipython = 'inline' in matplotlib.get_backend()
     if is_ipython:
-        from IPython import display
+        from IPython import display #type: ignore
 
     plt.ion()
     if is_ipython:
         if not show_result:
-            display.display(plt.gcf())
-            display.clear_output(wait=True)
+            display.display(plt.gcf()) #type: ignore
+            display.clear_output(wait=True) #type: ignore
         else:
-            display.display(plt.gcf())
+            display.display(plt.gcf()) #type: ignore
 
-def plot_weight_update(iterations, average_updates):
+def plot_weight_update(iterations: list[int], average_updates: list[int]):
     plt.ioff()
     plt.show()
     plt.figure()

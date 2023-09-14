@@ -8,7 +8,6 @@ import torch
 from environment import create_env
 from utils import plot_durations, plot_weight_update
 from agent import REINFORCE, DQNAgent
-from visual import render_agent
 from itertools import count
 
 def train_reinforce(num_episodes: int, random_seeds: list[int]) -> list[list[int]]:
@@ -41,13 +40,13 @@ def train_reinforce(num_episodes: int, random_seeds: list[int]) -> list[list[int
 
             done = False
             while not done:
-                action = agent.choose_action(obs)  # type: ignore
+                action = agent.choose_action(obs)  
 
                 # Step return type - `tuple[ObsType, SupportsFloat, bool, bool, dict[str, Any]]`
                 # These represent the next observation, the reward from the step,
                 # if the episode is terminated, if the episode is truncated and
                 # additional info from the step
-                obs, reward, terminated, truncated, _ = wrapped_env.step(action)  # type: ignore
+                obs, reward, terminated, truncated, _ = wrapped_env.step(action)  
                 agent.rewards.append(reward)
 
                 # End the episode when either truncated or terminated is true
@@ -60,7 +59,7 @@ def train_reinforce(num_episodes: int, random_seeds: list[int]) -> list[list[int
 
             # Print average reward every 100 episodes
             if episode % 100 == 0:
-                avg_reward = int(np.mean(wrapped_env.return_queue))  # type: ignore
+                avg_reward = int(np.mean(wrapped_env.return_queue))  
                 print("Episode:", episode, "Average Reward:", avg_reward)
 
         rewards_over_seeds.append(reward_over_episodes)
@@ -106,7 +105,7 @@ def train_dqn(num_episodes: int, random_seeds: list[int]) -> list[list[int]]:
                 
                 action = agent.choose_action(obs)
                 actions.append(action)
-                next_obs, reward, terminated, truncated, _ = wrapped_env.step(action)  # type: ignore
+                next_obs, reward, terminated, truncated, _ = wrapped_env.step(action)  
                 
             
                 # store transition and learn
@@ -115,8 +114,6 @@ def train_dqn(num_episodes: int, random_seeds: list[int]) -> list[list[int]]:
                 )  # needs implementation - temos que nos preocupar com isso?
                 
                 agent.learn()
-                
-                new_params = agent.q_network.get_network_weights()
 
                 # End the episode when either truncated or terminated is true
                 done = terminated or truncated
@@ -127,14 +124,13 @@ def train_dqn(num_episodes: int, random_seeds: list[int]) -> list[list[int]]:
                     episode_durations.append(t + 1)
                     #plot_durations(episode_durations)
                     break
-            #print(actions)
-            #input('')
 
+            new_params = agent.q_network.get_network_weights()
             weight_updates = [new - old for new, old in zip(new_params, old_params)]
             average_weight_update = sum(torch.norm(update) for update in weight_updates) / len(weight_updates)
             
             # Armazenando a média das atualizações de peso
-            average_updates.append(average_weight_update.item())
+            average_updates.append(average_weight_update)
             iterations.append(episode)
 
             reward_over_episodes.append(wrapped_env.return_queue[-1])
@@ -146,14 +142,11 @@ def train_dqn(num_episodes: int, random_seeds: list[int]) -> list[list[int]]:
 
             # Print average reward every 100 episodes
             if episode % 100 == 0:
-                avg_reward = int(np.mean(wrapped_env.return_queue))  # type: ignore
+                avg_reward = int(np.mean(wrapped_env.return_queue))  
                 print("Episode:", episode, "Average Reward:", avg_reward)
 
         rewards_over_seeds.append(reward_over_episodes)
 
-    #with open("agent_object.pkl", "wb") as f:
-    #    pickle.dump(agent, f)  
-    if True:
         print('Complete')
         plot_durations(episode_durations, show_result=True)
         plot_weight_update(iterations, average_updates)

@@ -63,8 +63,8 @@ class DQNNetwork(nn.Module):
     def __init__(self, obs_space_dims: int, action_space_dims: int):
         super().__init__() #type:ignore
 
-        hidden_space1 = 24
-        hidden_space2 = 24
+        hidden_space1 = 16
+        hidden_space2 = 32
 
         self.network = nn.Sequential(
             nn.Linear(obs_space_dims, hidden_space1),
@@ -78,5 +78,5 @@ class DQNNetwork(nn.Module):
     def forward(self, state: torch.Tensor) -> torch.Tensor:
         return self.network(state.float())
 
-    def get_network_weights(self):
+    def get_network_weights(self) -> list[torch.Tensor]:
         return [param.data.clone().detach() for param in self.network.parameters()]

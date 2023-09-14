@@ -91,7 +91,7 @@ class DQNAgent:
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.01  # minimal exploration rate
         self.epsilon_decay = 1 - 1/100  # exploration decay
-        self.batch_size = 20  # batch size for the experience replay
+        self.batch_size = 10  # batch size for the experience replay
         self.update_freq = 10  # frequency of updating the target network
         self.tau = 0.15 # update rate of the target network
 
@@ -103,7 +103,7 @@ class DQNAgent:
 
         self.optimizer = torch.optim.Adam(self.q_network.parameters(), lr=0.001)
 
-    def store_transition(self, state: list[float], action: list[float], reward: float, next_state: list[float], done: bool):
+    def store_transition(self, state: list[float], action: int, reward: float, next_state: list[float], done: bool):
         self.memory.append((state, action, reward, next_state, done)) #type: ignore
 
     def choose_action(self, state: list[float]) -> int:
