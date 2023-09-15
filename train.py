@@ -6,7 +6,7 @@ import random
 import torch
 
 from environment import create_env
-from utils import plot_durations, plot_weight_update
+from utils import *
 from agent import REINFORCE, DQNAgent
 from itertools import count
 
@@ -87,14 +87,12 @@ def train_dqn(num_episodes: int, random_seeds: list[int]) -> list[list[int]]:
 
         # Create environment
         wrapped_env, obs_space_dims, action_space_dims = create_env()
-        agent = DQNAgent(obs_space_dims, action_space_dims)
+        agent = load_dqn_agent('dqn_agent.pkl', obs_space_dims, action_space_dims)
 
         reward_over_episodes = []
-        #teste
         average_updates = []
         iterations = []
         episode_durations = []
-        weights = []
         for episode in tqdm(range(num_episodes)):
             obs, _ = wrapped_env.reset(seed=seed)
             done = False
@@ -147,9 +145,11 @@ def train_dqn(num_episodes: int, random_seeds: list[int]) -> list[list[int]]:
 
         rewards_over_seeds.append(reward_over_episodes)
 
+
         print('Complete')
+        save_dqn_agent(agent)
         plot_durations(episode_durations, show_result=True)
         plot_weight_update(iterations, average_updates)
-
+        
 
     return rewards_over_seeds
