@@ -1,7 +1,7 @@
 from typing import Any
 import gymnasium as gym
 
-def create_env(flag: bool = True) -> tuple[Any, int, int]:
+def create_env() -> tuple[Any, int, int]:
     """Creates and wraps the environment for training
 
     Returns:
